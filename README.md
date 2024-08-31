@@ -1,141 +1,84 @@
-# **FRED API in Python**
+# FRED API Wrapper
 
-This guide explains how to work with the **Federal Reserve Economic Data (FRED) API** in Python to retrieve economic data for analysis. FRED provides a wealth of data including U.S. economic indicators, interest rates, and more.
+## Overview
 
-## **Table of Contents**
+This project provides a Python wrapper for the Federal Reserve Economic Data (FRED) API. It simplifies the process of fetching economic data series, historical data, categories, and releases from FRED.
 
-1. [Requirements](#requirements)
-2. [Installation](#installation)
-3. [Getting Started](#getting-started)
-4. [Using the FRED API](#using-the-fred-api)
-5. [Examples](#examples)
-6. [Handling API Responses](#handling-api-responses)
-7. [Additional Resources](#additional-resources)
+## Features
 
-## **Requirements**
+- Easy-to-use Python interface for FRED API
+- Support for fetching series data, historical data, categories, and releases
+- Built-in token verification for enhanced security
+- Customizable error handling
 
-- Python 3.6 or higher
-- `requests` library for handling HTTP requests
-- `pandas` library for data manipulation and analysis
+## Installation
 
-## **Installation**
-
-First, ensure you have Python 3.6 or higher installed. Then, install the necessary libraries using pip:
+To install the FRED API Wrapper, run the following command:
 
 ```bash
-pip install requests pandas
+pip install fred-api-wrapper
 ```
 
-## **Getting Started**
+## Usage
 
-### **1. Obtain an API Key**
-
-To use the FRED API, you'll need to sign up for an API key:
-
-1. Visit the [FRED API registration page](https://fred.stlouisfed.org/)
-2. Sign up for a free account
-3. Retrieve your API key from your account settings
-
-### **2. Set Up Your Python Script**
-
-Create a Python script (e.g., `fred_api.py`) and include your API key:
+Here's a quick example of how to use the FRED API Wrapper:
 
 ```python
-import requests
-import pandas as pd
+from fred_api_wrapper import FredPyAPI
 
-# Replace with your actual API key
-API_KEY = 'your_api_key_here'
-BASE_URL = 'https://api.stlouisfed.org/fred/'
+# Initialize the API with your token
+fred_api = FredPyAPI("your_api_key_here")
+
+# Get series data
+gdp_data = fred_api.get_series_data("GDP")
+
+# Get historical data
+historical_gdp = fred_api.get_historical_data("GDP", observation_start="2020-01-01", observation_end="2023-12-31")
+
+# Get categories
+main_categories = fred_api.get_categories()
+
+# Get releases
+recent_releases = fred_api.get_releases(realtime_start="2023-01-01")
+
+print(gdp_data)
+print(historical_gdp)
+print(main_categories)
+print(recent_releases)
 ```
 
-## **Using the FRED API**
+## API Reference
 
-To retrieve data, make a GET request to the FRED API endpoint using the `requests` library.
+### `FredPyAPI`
 
-### **Common Endpoints:**
+The main class for interacting with the FRED API.
 
-- **Get Economic Data Series**: `/series`
-- **Get Observations (Historical Data)**: `/series/observations`
-- **Get Categories**: `/category`
-- **Get Releases**: `/releases`
+#### Methods:
 
-### **Example: Fetching Data for a Series**
+- `get_series_data(series_id: str) -> dict`
+- `get_historical_data(series_id: str, observation_start: Optional[str] = None, observation_end: Optional[str] = None) -> dict`
+- `get_categories(category_id: int = 0) -> dict`
+- `get_releases(realtime_start: Optional[str] = None, realtime_end: Optional[str] = None) -> dict`
 
-To fetch data for a specific series, use the `/series/observations` endpoint.
+For detailed information on each method, please refer to the [FRED API documentation](https://fred.stlouisfed.org/docs/api/fred/).
 
-```python
-def get_series_data(series_id, api_key):
-    url = f'{BASE_URL}series/observations'
-    params = {
-        'series_id': series_id,
-        'api_key': api_key,
-        'file_type': 'json'
-    }
-    response = requests.get(url, params=params)
-    if response.status_code == 200:
-        data = response.json()
-        return pd.DataFrame(data['observations'])
-    else:
-        print(f'Error: {response.status_code}')
-        return None
+## Security
 
-# Example Usage
-series_id = 'GDP'
-df = get_series_data(series_id, API_KEY)
-print(df.head())
-```
+This wrapper includes a built-in mechanism for verifying the integrity of the API key. For more information on setting up and using this feature, please refer to the [security documentation](docs/security.md).
 
-## **Handling API Responses**
+## Contributing
 
-The API response is typically in JSON format. Use Python’s `json` library to parse the response and `pandas` to manipulate and analyze the data.
+Contributions to the FRED API Wrapper are welcome! Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
 
-### **Error Handling**
+## License
 
-Always check the status code of the response:
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-```python
-if response.status_code == 200:
-    # Handle the data
-else:
-    print(f'Error: {response.status_code}')
-```
+## Acknowledgments
 
-## **Examples**
+- Federal Reserve Bank of St. Louis for providing the FRED API
+- All contributors to this project
 
-1. **Fetch and Plot GDP Data:**
+## Contact
 
-```python
-import matplotlib.pyplot as plt
-
-# Fetch the data
-df = get_series_data('GDP', API_KEY)
-
-# Convert date to datetime format and plot
-df['date'] = pd.to_datetime(df['date'])
-df['value'] = pd.to_numeric(df['value'])
-
-plt.plot(df['date'], df['value'])
-plt.title('US GDP Over Time')
-plt.xlabel('Date')
-plt.ylabel('GDP')
-plt.show()
-```
-
-## **Additional Resources**
-
-- [FRED API Documentation](https://fred.stlouisfed.org/docs/api/fred/)
-- [Requests Library Documentation](https://docs.python-requests.org/en/master/)
-- [Pandas Library Documentation](https://pandas.pydata.org/)
-
-## **Contributing**
-
-If you'd like to contribute to this guide, please feel free to submit a pull request or open an issue.
-
-## **License**
-
-This project is licensed under the MIT License.
-
----
-
-This `README.md` file provides a basic overview of how to get started with the FRED API in Python, including setup, usage, and examples. Would you like more details on a specific section?
+For any questions or concerns, please open an issue on the GitHub repository.
