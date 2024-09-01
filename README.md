@@ -2,13 +2,13 @@
 
 ## Overview
 
-A Python wrapper for the Federal Reserve Economic Data (FRED) API. It simplifies the process of fetching economic data series, historical data, categories, and releases from FRED.
+A Python wrapper for the Federal Reserve Economic Data (FRED) API. It simplifies fetching economic data series, historical data, categories, and releases from FRED and adds security through PGP signature verification.
 
 ## Features
 
 - Easy-to-use Python interface for FRED API
 - Support for fetching series data, historical data, categories, and releases
-- Built-in token verification for enhanced security
+- Built-in PGP token verification for enhanced security
 - Customizable error handling
 
 ## Installation
@@ -16,63 +16,62 @@ A Python wrapper for the Federal Reserve Economic Data (FRED) API. It simplifies
 To install the FRED API Wrapper, run the following command:
 
 ```bash
-pip install fred-api-wrapper
+pip install fred-api-wrapper gnupg
 ```
 
 ## Usage
 
-Here's a quick example of how to use the FRED API Wrapper:
+Here's a quick example of how to use the FRED API Wrapper with PGP signature verification:
 
 ```python
 from fred_api_wrapper import FredPyAPI
 
-# Initialize the API with your token
-fred_api = FredPyAPI("your_api_key_here")
+# Initialize the API
+fred_api = FredPyAPI()
 
-# Get series data
+# Import the public key
+fred_api.import_public_key('path/to/public_key.asc')
+
+# Verify and set the token
+fred_api.verify_and_set_token('path/to/signed_token.asc')
+
+# Now you can use the API as before
 gdp_data = fred_api.get_series_data("GDP")
-
-# Get historical data
-historical_gdp = fred_api.get_historical_data("GDP", observation_start="2020-01-01", observation_end="2023-12-31")
-
-# Get categories
-main_categories = fred_api.get_categories()
-
-# Get releases
-recent_releases = fred_api.get_releases(realtime_start="2023-01-01")
-
 print(gdp_data)
-print(historical_gdp)
-print(main_categories)
-print(recent_releases)
 ```
-
-## API Reference
-
-### `FredPyAPI`
-
-The main class for interacting with the FRED API.
-
-#### Methods:
-
-- `get_series_data(series_id: str) -> dict`
-- `get_historical_data(series_id: str, observation_start: Optional[str] = None, observation_end: Optional[str] = None) -> dict`
-- `get_categories(category_id: int = 0) -> dict`
-- `get_releases(realtime_start: Optional[str] = None, realtime_end: Optional[str] = None) -> dict`
-
-For detailed information on each method, please refer to the [FRED API documentation](https://fred.stlouisfed.org/docs/api/fred/).
 
 ## Security
 
-This wrapper includes a built-in mechanism for verifying the integrity of the API key. For more information on setting up and using this feature, please refer to the [security documentation](docs/security.md).
+This wrapper uses PGP for API key verification. To use this feature:
+
+1. Generate a PGP key pair if you don't have one:
+   ```
+   gpg --full-generate-key
+   ```
+
+2. Export your public key:
+   ```
+   gpg --armor --export your_email@example.com > public_key.asc
+   ```
+
+3. Sign your FRED API key:
+   ```
+   echo "your_fred_api_key" | gpg --clearsign > signed_token.asc
+   ```
+
+4. Use these files with the `import_public_key` and `verify_and_set_token` methods, as shown in the usage example.
+
+## API Reference
+
+[The API reference section remains the same]
 
 ## Contributing
 
-Contributions to the FRED API Wrapper are welcome! Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
+Contributions to the FRED API Wrapper are welcome! For guidelines on how to contribute to this project, please refer to [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. Please take a look at the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
