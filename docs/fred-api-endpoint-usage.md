@@ -1,18 +1,21 @@
 # FRED API Endpoint Usage Guide
 
-### This guide demonstrates how to use each endpoint of the FredPyAPI class.
+This guide demonstrates how to use each endpoint of the FredPyAPI class.
 
-## First, set up API instance:
+## Setup
 
-```
+First, set up the API instance:
+
+```python
 from fredpy_api import FredPyAPI
 
 fred_api = FredPyAPI()
 fred_api.set_token("your_api_key_here")  # Replace with your actual FRED API key
 ```
 
-1. Get Series Data
-```
+## 1. Get Series Data
+
+```python
 # Get data for the GDP series
 gdp_data = fred_api.get_series_data("GDP")
 print(gdp_data)
@@ -21,8 +24,10 @@ print(gdp_data)
 unemployment_data = fred_api.get_series_data("UNRATE")
 print(unemployment_data)
 ```
-2. Get Historical Data
-```
+
+## 2. Get Historical Data
+
+```python
 # Get historical GDP data from 2020 to 2023
 historical_gdp = fred_api.get_historical_data("GDP", observation_start="2020-01-01", observation_end="2023-12-31")
 print(historical_gdp)
@@ -31,8 +36,10 @@ print(historical_gdp)
 all_cpi_data = fred_api.get_historical_data("CPIAUCSL")
 print(all_cpi_data)
 ```
-3. Get Categories
-```
+
+## 3. Get Categories
+
+```python
 # Get the main categories (category_id 0 is the root)
 main_categories = fred_api.get_categories()
 print(main_categories)
@@ -41,8 +48,10 @@ print(main_categories)
 finance_categories = fred_api.get_categories(32991)
 print(finance_categories)
 ```
-4. Get releases
-```
+
+## 4. Get Releases
+
+```python
 # Get all releases
 all_releases = fred_api.get_releases()
 print(all_releases)
@@ -56,5 +65,5 @@ date_range_releases = fred_api.get_releases(realtime_start="2023-01-01", realtim
 print(date_range_releases)
 ```
 
-### NOTE:  
-#### Remember to replace "your_api_key_here" with your actual FRED API key.
+Remember to replace "your_api_key_here" with your actual FRED API key. The actual output will be JSON data containing
+various information about the requested series, historical data, categories, or releases.
