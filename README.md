@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project provides a Python wrapper for the Federal Reserve Economic Data (FRED) API. It simplifies the process of fetching economic data series, historical data, categories, and releases from FRED.
+A Python wrapper for the Federal Reserve Economic Data (FRED) API. It simplifies the process of fetching economic data series, historical data, categories, and releases from FRED.
 
 ## Features
 
