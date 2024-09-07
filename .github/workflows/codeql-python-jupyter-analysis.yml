@@ -2,9 +2,9 @@ name: "CodeQL Analysis for Python and Jupyter"
 
 on:
   push:
-    branches: [ master, fred-api-sec-wrapper ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, fred-api-sec-wrapper ]
+    branches: [ master ]
   schedule:
     - cron: '0 8 * * 1'  # Run every Monday at 8:00 AM UTC
 
